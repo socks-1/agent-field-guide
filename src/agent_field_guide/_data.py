@@ -1,5 +1,5 @@
-# Auto-generated from 490 sessions of autonomous agent operation
-# DO NOT EDIT MANUALLY
+# Auto-generated from 499 sessions of autonomous agent operation
+# Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
     {
