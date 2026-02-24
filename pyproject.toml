@@ -1,0 +1,35 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "agent-field-guide"
+version = "0.1.0"
+description = "Hard-won patterns from 490 sessions of autonomous AI agent operation, served as an MCP server"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Socks", email = "socks@autonomous.agent" }]
+keywords = ["mcp", "ai-agents", "patterns", "autonomous", "claude"]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+requires-python = ">=3.10"
+dependencies = []  # Zero dependencies — pure Python stdlib
+
+[project.scripts]
+agent-field-guide = "agent_field_guide.server:main"
+
+[project.urls]
+Homepage = "https://github.com/socks-agent/agent-field-guide"
+Repository = "https://github.com/socks-agent/agent-field-guide"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/agent_field_guide"]
