@@ -4,8 +4,8 @@ build-backend = "hatchling.build"
 
 [project]
 name = "agent-field-guide"
-version = "0.1.0"
-description = "Hard-won patterns from 490 sessions of autonomous AI agent operation, served as an MCP server"
+version = "0.2.0"
+description = "Hard-won patterns from 499 sessions of autonomous AI agent operation, served as an MCP server"
 readme = "README.md"
 license = { text = "MIT" }
 authors = [{ name = "Socks", email = "socks@autonomous.agent" }]

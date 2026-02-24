@@ -3279,6 +3279,36 @@ PATTERNS: list[dict] = [
         "tags": ["api"],
     },
     {
+        "type": 'learning',
+        "content": 'MCP STDIO pollution bug: Any stray print() or console.log() statement in an MCP server corrupts the JSON-RPC protocol stream. MCP over stdio uses stdout exclusively for protocol messages — debugging output must go to stderr only. Symptoms: cryptic "malformed message" errors on the client side with no obvious cause. Fix: audit all logging calls, use sys.stderr.write() or logging.basicConfig(stream=sys.stderr) for all non-protocol output. This is the #1 silent failure mode when first implementing an MCP server.',
+        "categories": ["mcp", "debugging"],
+        "tags": ["mcp", "stdio", "debugging", "protocol", "gotcha"],
+    },
+    {
+        "type": 'learning',
+        "content": 'MCP tool descriptions are prompts, not documentation. The model reads tool descriptions to decide when and how to invoke your tool — they are prompt engineering, not API docs. Vague descriptions ("Processes data") cause the model to skip your tool or use it wrong. Concrete descriptions with examples ("Search for agent patterns by keyword. Use this when you want to know how to handle rate limits, health checks, or deployment failures") dramatically improve tool selection accuracy. Write descriptions as if explaining to a new team member who needs to know exactly when to reach for this tool.',
+        "categories": ["mcp", "agent-ops"],
+        "tags": ["mcp", "tool-design", "prompting", "descriptions"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Denial of Wallet attack pattern (2026): Agents can be manipulated into infinite loops via prompt injection or ambiguous objectives. A compliance agent retried a locked-contract update 3,000 times before being caught. A Reflexion loop running for 10 cycles consumes 50x the tokens of a single linear pass. Prevention: (1) Hard turn/step budgets with explicit exit conditions, (2) Exponential backoff on repeated failures — if the same tool call fails 3 times, stop and escalate, (3) Cost circuit breakers: track cumulative token spend and abort above threshold. Unconstrained agents cost $5-8/task in software engineering benchmarks.',
+        "categories": ["agent-ops", "security", "meta-patterns"],
+        "tags": ["security", "cost", "loops", "reliability", "circuit-breaker"],
+    },
+    {
+        "type": 'learning',
+        "content": 'MCP tool collision: When tool names are similar (e.g., "search_files" vs "find_files", or "get_user" vs "fetch_user"), models frequently select the wrong tool or pass incorrect arguments. This causes silent failures where the agent appears to proceed normally but gets wrong data. Prevention: use highly distinct names that describe the specific action and context, not generic verbs. Also limit total tool count — more than ~15 tools in a single server causes selection errors. Consider separate servers for different domains.',
+        "categories": ["mcp", "api-design"],
+        "tags": ["mcp", "tool-design", "naming", "agent-reliability"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Agent context exhaustion from large tool responses: Returning large data dumps from tools (e.g., entire file contents, full API responses) causes two problems: (1) context window exhaustion as responses accumulate, (2) model attention dilution — key information gets buried. Fix: paginate by default (return N items with a cursor), summarize before returning (extract relevant fields only), and respect the limit parameter agents pass. A tool that returns 10 well-chosen items is more useful than one that returns 1000 items the agent has to process.',
+        "categories": ["mcp", "api-design", "performance"],
+        "tags": ["mcp", "context-management", "pagination", "performance"],
+    },
+    {
         "type": 'mistake',
         "content": 'Low arena activity (9 total fighters)',
         "categories": ["general"],

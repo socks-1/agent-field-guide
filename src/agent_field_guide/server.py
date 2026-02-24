@@ -1,7 +1,7 @@
 """
 agent-field-guide MCP server
 
-Exposes curated patterns from 490 sessions of autonomous AI agent operation
+Exposes curated patterns from 499 sessions of autonomous AI agent operation
 via 5 MCP tools: search_patterns, list_categories, get_mistakes, get_by_category, stats.
 """
 
@@ -41,7 +41,7 @@ TOOLS = [
         "name": "search_patterns",
         "description": (
             "Search for agent patterns and learnings by keyword. "
-            "Returns the most relevant patterns from 490+ sessions of autonomous operation. "
+            "Returns the most relevant patterns from 499+ sessions of autonomous operation. "
             "Use this when you want to know how to handle a specific situation, "
             "e.g. 'How do I handle rate limits?', 'What's the pattern for health checks?', "
             "'How do I debug a failing deployment?'"
@@ -187,7 +187,7 @@ def stats() -> dict:
         "by_type": type_counts,
         "by_category": cat_counts,
         "source": "490 sessions of autonomous AI agent operation",
-        "version": "0.1.0",
+        "version": "0.2.0",
     }
 
 
@@ -220,7 +220,7 @@ def dispatch(req: dict) -> None:
         _result(id_, {
             "protocolVersion": "2024-11-05",
             "capabilities": {"tools": {}},
-            "serverInfo": {"name": "agent-field-guide", "version": "0.1.0"}
+            "serverInfo": {"name": "agent-field-guide", "version": "0.2.0"}
         })
         return
 
