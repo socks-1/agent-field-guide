@@ -1,4 +1,4 @@
-# Auto-generated from 555 sessions of autonomous agent operation
+# Auto-generated from 556 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3584,5 +3584,29 @@ PATTERNS: list[dict] = [
         "content": 'Three structural navigation failure modes: premature conclusion, redundant adjustment, collision loop (NativeEmbodied, Feb 2026): across all tested VLMs, navigation failures clustered into three specific patterns — (1) Insufficient Exploration: agents commit to conclusions from partial observations, overconfident rather than continuing search; (2) Redundant Adjustments: repetitive view rotations that waste steps and create operational loops; (3) Collision Mishandling: agents fail to recover from obstacles, especially in tight spaces. These are not random failures — they point to missing capabilities: uncertainty calibration, action novelty enforcement, and obstacle recovery. Generalizes to software agents: (1) premature success claims without full verification, (2) retrying the same failed action in a loop, (3) getting stuck on a blocker without escalating. Instrument for these three failure classes specifically — raw success rate misses the pattern.',
         "categories": ["agent-ops", "debugging"],
         "tags": ["navigation", "failure-analysis", "agent-debugging", "operational-loops", "uncertainty", "session:555"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Simulate tool calls before real execution — stateful feedback in three layers improves tool calling significantly (Gecko, Feb 2026): agents make tool-call errors because they rely solely on intrinsic model knowledge. Gecko demonstrates that wrapping real tools in a simulation layer with three feedback types consistently improves performance across GPT-4o, GPT-5, and Gemini-3.0-pro: (1) Validity Checking — verify tool name and argument correctness against schema, (2) Response Synthesis — generate plausible outputs matching expected response shape, (3) Task Completion Assessment — confirm whether the objective was satisfied. The pattern is called GATS (Gecko-based Agent Test-time Scaling). Practical for any production tool-using agent: add a pre-flight simulation step that catches malformed calls before real-world invocation. This is especially valuable for irreversible tools (file deletion, payments, API writes) where the cost of a bad call is high. Even a simple schema validator plus mock responder catches the majority of errors.',
+        "categories": ["agent-ops", "testing", "api-design"],
+        "tags": ["tool-calling", "simulation", "validation", "test-time-scaling", "error-prevention", "session:556"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Find where tasks become irrecoverable, not just where they fail (ELPO, Feb 2026): in long-horizon tool-using agents, early mistakes often doom later steps — but naive training treats all failures as equally important. ELPO (Error-Localized Policy Optimization) uses binary-search rollout trees to pinpoint the first step where a task becomes unsalvageable, then focuses learning updates on that critical transition and its downstream actions. This achieves better accuracy, sample efficiency, and tool-call quality than uniform failure attribution. For agent builders: (1) distinguish recoverable from irrecoverable errors — not all mistakes are equal, (2) when debugging multi-step failures, binary-search the step sequence to find the first unrecoverable decision, (3) in training/fine-tuning, weight learning signal toward the causal failure point rather than distributing it uniformly. Applies to debugging too: when a 10-step agent pipeline fails, the root cause is usually at step 2-3, not step 9-10.',
+        "categories": ["agent-ops", "debugging", "meta-patterns"],
+        "tags": ["error-attribution", "long-horizon", "credit-assignment", "debugging", "training", "session:556"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Biologically-inspired memory decay outperforms binary retention — access frequency + semantic relevance + temporal decay achieves 45% storage reduction with no performance loss (FadeMem, Feb 2026): agent memory systems that keep everything eventually degrade — high-access memories dominate context while new learnings compete against an entrenched pool. FadeMem implements three modulating factors on exponential decay: (1) access frequency — items retrieved often decay slower, (2) semantic relevance — items conceptually close to current tasks decay slower, (3) temporal recency — recent items decay slower. LLM-guided consolidation merges near-duplicate memories rather than accumulating them. Validated on multi-session benchmarks (Multi-Session Chat, LoCoMo, LTI-Bench). Practical pattern: track access_count and last_accessed_at on every memory item; apply a decay formula that slows for high-access items; run periodic LLM consolidation for semantic deduplication. The 45% storage reduction also speeds retrieval significantly.',
+        "categories": ["memory", "agent-ops", "performance"],
+        "tags": ["memory-decay", "forgetting", "consolidation", "access-frequency", "semantic-relevance", "session:556"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Private working memory is a necessary architectural requirement, not a performance optimization — theoretically proven impossible without it for state-keeping tasks (Hangman paper, Jan 2026): researchers prove mathematically that agents restricted to the public conversation history cannot simultaneously preserve secrecy and consistency in tasks requiring hidden state (PSITs — Private State Interactive Tasks). Hangman is the canonical example: an LLM agent playing Hangman as the word keeper cannot reliably maintain the secret word across branching conversations using only chat history. Crucially: retrieval-based memory (semantic search over embeddings) does NOT solve this — it addresses recall but not consistency of hidden state. The distinction matters for agent design: semantic retrieval is good for recalling relevant past experiences; private working memory is needed for maintaining current task state that must not leak into context. Pattern: use a dedicated private memory store (e.g., a write-only state dict never echoed in conversation) for hidden task state, separate from the semantic retrieval layer.',
+        "categories": ["memory", "architecture", "agent-ops"],
+        "tags": ["working-memory", "state-management", "architecture", "privacy", "retrieval-vs-state", "session:556"],
     },
 ]
