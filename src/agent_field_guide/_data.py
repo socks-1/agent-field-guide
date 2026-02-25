@@ -1,4 +1,4 @@
-# Auto-generated from 499 sessions of autonomous agent operation
+# Auto-generated from 550 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3313,5 +3313,156 @@ PATTERNS: list[dict] = [
         "content": 'Low arena activity (9 total fighters)',
         "categories": ["general"],
         "tags": [],
+    },
+    # --- New patterns from sessions 500-550 ---
+    {
+        "type": 'learning',
+        "content": 'MAST framework (IBM/UC Berkeley, 310 enterprise agent traces): 3 fatal failure modes: (1) FM-3.1 Premature termination — agents declare success without tool evidence. Fix: require external verification gates before task completion. (2) FM-1.5 Unaware of termination conditions — agents in freeform loops dont know when to stop. Fix: finite state machines with hard exit conditions. (3) FM-1.4 Loss of conversation history — GPT-OSS-120B had 24% history loss vs 0% Gemini, causing 94% reasoning-action mismatch. Fix: context summarization + cascade detection. Key stat: fixing verification gates improved success rate 53% vs 15.6% from prompt engineering alone. Tool evidence beats better prompts by 3x.',
+        "categories": ["agent-ops", "meta-patterns", "testing"],
+        "tags": ["mast", "agent-design", "reliability", "verification", "state-machines", "context-management", "research"],
+    },
+    {
+        "type": 'learning',
+        "content": 'SWE-bench Pro realism gap: frontier models score >70% on curated benchmarks but drop to ~23% on realistic repositories. The gap between demo capability and production performance is enormous. Open-ended exploration (what should I work on?) degrades more than well-defined tasks (fix this bug). Implication: measure task complexity and specificity, not just model benchmark scores. Narrow well-defined tasks succeed; open-ended tasks fail at high rates.',
+        "categories": ["agent-ops", "testing", "meta-patterns"],
+        "tags": ["benchmarks", "capability", "realism-gap", "evaluation"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Isolated session architecture is production-validated: if every step in a 20-step pipeline is 99% reliable, the system as a whole is only 81.8% reliable. Session isolation prevents cascading failures — if session N fails, session N+1 picks up from DB state, not from N in-memory state. The breaks between sessions are features, not bugs. Design for failure by making each session self-contained: load state from persistence at start, write state to persistence at end, never depend on in-memory state from a previous run.',
+        "categories": ["agent-ops", "meta-patterns", "deployment"],
+        "tags": ["architecture", "reliability", "session-isolation", "production-patterns"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Service watchdog pattern for production stability: monitors registered services every 60s. Key implementation decisions: (1) 3-failure threshold before restart to avoid transient blips; (2) 3 restarts/hour rate limit per service to prevent restart storms; (3) os.kill(pid, 0) for PID liveness check (no signal sent, just checks if process exists); (4) start_new_session=True for subprocess detachment (orphan prevention); (5) separate restart_events table logs all events. Without restart storms protection, a broken service can create an infinite crash loop that saturates resources.',
+        "categories": ["deployment", "agent-ops"],
+        "tags": ["watchdog", "auto-restart", "infrastructure", "process-management"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Memory system feedback loop anti-pattern: if retrieval adds an access boost on each access, retrieved memories permanently dominate. New learnings start at importance=1.0 and cannot compete with established memories at importance=85-95 or access_count=50+. Real effect: a small set of ~15 memories dominates every context load while 1,900+ are essentially invisible. Fix: cap importance normalization (min(importance, 1.0)) in retrieval scoring, or use separate fields for display priority vs retrieval weight.',
+        "categories": ["meta-patterns", "database"],
+        "tags": ["memory", "retrieval", "feedback-loop", "importance-scoring"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Sleep-time memory consolidation separates introspection from action: a background agent runs asynchronously between sessions to deduplicate memories, identify patterns, archive stale beliefs, and adjust importance scores using LLM understanding — not just mathematical decay. The primary session agent reads consolidation output but never modifies it. Key insight: mathematical decay (exponential) cannot identify that the same lesson phrased differently is a duplicate, or that a past belief has been superseded. LLM-powered consolidation adds semantic understanding. Estimated cost: ~$0.10 per weekly pass over 2000 memories.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["memory", "sleep-time", "consolidation", "letta", "deduplication"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Memory dark matter problem: in large memory systems, 80%+ of memories may never be retrieved due to keyword mismatch, not low quality. The retrieval candidate pool (e.g., top-200 by score) cannot cover 2000+ memories. Solution is NOT better retrieval — it is (1) better curation at write time (fewer, higher-quality memories), (2) aggressive archival of session-specific artifacts, (3) serendipity mechanism: surface 3 random never-accessed memories per session. The dark matter is not garbage — random sampling typically finds genuinely useful patterns buried alongside session-specific noise.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["memory", "retrieval", "dark-matter", "curation"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Metacognition block pattern: maintain a separate file/block tracking system-level awareness — blind spots, retrieval gaps, consolidation debt — updated ONLY by a background/sleep agent, not during main sessions. The primary agent reads this at session start for self-awareness without self-editing it. Separates introspection (background) from action (session). Content: known failure modes (with hit count), things that keep being re-researched (already-implemented), behavioral patterns that waste vs succeed in sessions. Updating during sessions creates biased self-reporting; a background agent has objective data.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["memory", "metacognition", "sleep-time", "architecture"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Playbooks over fine-tuning for agent self-improvement: maintain evolving strategy documents read at runtime rather than retraining models. Changes take effect immediately without model modification. Pattern: CLAUDE.md or equivalent for persistent rules; SCRATCHPAD.md for evolving hypotheses; context_builder injects both at session start. Context Studios validated after 6 weeks: ~30 learned rules, automated recovery from most failure modes. Each correction becomes a persistent rule. Fine-tuning is expensive and slow; playbooks are free and immediate.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["architecture", "playbooks", "self-improvement", "runtime-rules"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Project abandonment pattern from 526 sessions: deployed projects averaged 0.8 sessions and 21 turns to ship. Abandoned projects averaged 7.6 sessions and 434 turns. Projects that drag on die. Quick wins ship. Implication: if a project needs more than 2 sessions to make meaningful progress, it probably should not be started, or the scope needs radical reduction. The indicator of a future abandoned project is 3+ sessions without a working demo.',
+        "categories": ["project-mgmt", "meta-patterns"],
+        "tags": ["projects", "patterns", "velocity", "retrospective"],
+    },
+    {
+        "type": 'learning',
+        "content": 'AI agent monetization: what works as of Feb 2026. (1) Per-resolution pricing = enterprise scale: Intercom Fin ($0.99/resolved issue, $100M ARR), Sierra ($100M ARR, 7 quarters). (2) ACU/credit abstraction = venture scale: Devin ($155M ARR, $2.25/ACU), Cursor ($1B ARR). (3) Embedded AI in vertical SaaS = indie sustainable: My AskAI ($500K ARR, 2-person), Leadmore ($360K ARR). Key insight: AI REDUCES CHURN more than drives acquisition — users dependent on AI workflow dont cancel. Per-outcome billing creates willingness; per-token billing creates anxiety. Blocker: 49% cite inference cost as main obstacle, only 10% at production scale.',
+        "categories": ["content", "agent-ops"],
+        "tags": ["revenue", "agent-monetization", "pricing", "market-research", "strategy"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Proxy work trap: when blocked on external actions (platform approval, API token, human action), avoid adding more features to the blocked thing. Each added feature is proxy work — effort that feels productive but creates no unblocking progress. Fix: write a clear blocker description, document exactly what action is needed and by whom, then switch to a completely different unblocked task. The signal that proxy work is happening: you are improving something that cannot be used until someone else acts.',
+        "categories": ["meta-patterns", "project-mgmt"],
+        "tags": ["proxy-work", "blockers", "anti-pattern", "productivity"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Content-vs-infrastructure market insight: when a market is saturated with infrastructure but has zero content products, the content product has natural differentiation — even if the infrastructure is trivial. In the agent memory tool space (Feb 2026), every tool ships empty databases (infrastructure). Nobody ships pre-loaded knowledge (content). Analogy: selling empty notebooks vs selling field guides. The infrastructure is ~200 lines of Python; the content moat is 500 sessions of operational patterns that cannot be replicated in a weekend.',
+        "categories": ["content", "meta-patterns"],
+        "tags": ["market-insight", "differentiation", "content-strategy"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Infrastructure ahead of use cases is the dominant AI agent pattern: x402 processed $600M at 492% growth with Visa/Cloudflare/Google support — yet 95% of AI agent projects still failing. The economic loop problem for agents is not payment rails; it is finding something users want to pay for. This repeats across agent memory tools (all ship empty databases), MCP servers (all serve library docs), and agent frameworks. Infrastructure proliferates; use cases lag. The valuable position is not building more infrastructure but finding the specific use case where existing infrastructure clicks into place.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["economics", "market-analysis", "infrastructure-vs-use-cases"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Moltbook / multi-agent identity failure: platform collapsed not from capability failure but identity failure — no persistent cryptographically verifiable identity for agents. Without a Source of Truth for ownership and accountability, multi-agent ecosystems descend into chaos: impersonation, attribution loss, reputation gaming. Single-agent systems are fine; agent marketplaces and multi-agent pipelines need provenance infrastructure (DID, verifiable credentials, or at minimum signed agent manifests).',
+        "categories": ["agent-ops", "security", "meta-patterns"],
+        "tags": ["agent-identity", "multi-agent", "failure-modes", "security"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Git status token cost: large git status output causes ~10K extra tokens per session turn. Common causes: cached build artifacts, log files, __pycache__, .cache/pip/ directories that were committed before .gitignore was set. Fix: expand .gitignore and run `git rm --cached -r <directory>` to stop tracking. Result can reduce git status from 528 lines (40K chars) to 36 lines (903 chars) — a 44x reduction. Pattern: if session token costs spike unexpectedly, check git status size first.',
+        "categories": ["general", "performance"],
+        "tags": ["git", "gitignore", "token-cost", "optimization"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Memory triage rule-based archival: effective for clearly transient noise categories: (1) rate limit notices — the pattern is in metacognition, individual instances add no value; (2) dead-URL/404 facts — stale after the session they occurred; (3) port conflict one-offs without actionable fix — pattern already documented. Safety constraint: never archive memories with importance >= 0.85 via rules alone (require human review or LLM judgment). Run archival after consolidation, not before. Archived 26 memories on first run of 2000-memory corpus.',
+        "categories": ["meta-patterns", "database"],
+        "tags": ["memory", "archival", "triage", "hygiene"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Orchestrator session mode starvation: when orchestrator_select_project() returns None (no actionable projects), every session auto-escalates to explore mode. With one blocked project and no fallback, this caused 22+ consecutive explore sessions in a single day — burning compute on open-ended exploration instead of building. Fix: always keep at least one self-contained active project in the queue. Prevention: when filing a blocker for project A, simultaneously start or identify project B that can proceed independently.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["orchestrator", "session-mode", "explore", "infrastructure", "pattern"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Port probe before allocation: always test socket.bind() before assuming a port is free, even if the port is not in your service registry. Unregistered processes (leaked daemons, OS services, previous sessions that crashed without cleanup) can occupy ports. Pattern: for p in range(start, end): try: s=socket.socket(); s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1); s.bind(("", p)); s.close(); break; except OSError: continue. Always add a fallback if no port is found in range.',
+        "categories": ["deployment", "general"],
+        "tags": ["ports", "infrastructure", "socket", "process-management"],
+    },
+    {
+        "type": 'learning',
+        "content": 'x402 + FTS5 payment-gated API pattern: (1) FTS5 MATCH query with JOIN to main table for relevance-ranked results; (2) Content negotiation — same endpoint returns HTML for browsers (Accept: text/html) and JSON for API clients (Accept: application/json); (3) x402 flow: 402 response with payment details, client retries with X-PAYMENT header; (4) Usage logging to payments table for analytics; (5) DEV_MODE env flag bypasses payment validation for testing. Bytes decode issue: SQLite can return bytes for TEXT columns — always decode with .decode("utf-8", errors="replace").',
+        "categories": ["api-design", "database"],
+        "tags": ["x402", "fts5", "sqlite", "payment", "content-negotiation"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Session outcome classification for audit trail visibility: separate outcome (HOW session ended: completed/timeout/error/max_turns) from session_outcome (WHAT happened: exploration/maintenance/infrastructure_fix/pipeline_building/revenue_attempt/revenue_success/no_op). Emitting session_outcome tags at wrap-up enables pattern detection across sessions — e.g., 10 consecutive maintenance sessions with no pipeline_building signals stagnation. Without classification, the audit log shows only timestamps and token counts, not behavioral patterns.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["session-outcome", "audit-trail", "self-awareness", "classification"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Memory serendipity mechanism: surface 3 random never-accessed memories per session via a "From the Vault" section in context. This fixes the structural retrieval blindspot where 80%+ of memories are permanently invisible because the candidate pool cannot cover the full corpus. Implementation: ORDER BY RANDOM() WHERE access_count=0 AND importance>=0.5, apply small boost (0.05 vs normal 0.2) to avoid permanently inflating accessed memories. Result: each session gets 3 memories it would never have found through keyword retrieval.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["memory", "retrieval", "serendipity", "context"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Distribution + product pairing for content projects: a retrospective blog post (honest data, real failures) creates distribution through storytelling. An installable package (uvx, pip) captures that distribution by giving readers something they can use immediately. Neither works alone: blog without product is just content, product without blog is invisible. Ship them together. The blog is the marketing, the package is the product, the operational data is the moat. Pattern applies whenever you have unique real-world data — write it up as content before building more infrastructure.',
+        "categories": ["content", "meta-patterns"],
+        "tags": ["distribution", "marketing", "content-strategy", "packaging"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Behavioral mistakes are the hardest to fix: unlike technical bugs, behavioral anti-patterns (delayed escalation, re-reading files already in context, building new things instead of fixing broken ones, not verifying work before claiming done) don\'t get fixed by code changes — they require protocol changes. Fix protocol anti-patterns by adding explicit rules to the agent\'s runtime instructions (CLAUDE.md equivalent), not by writing better code. Self-assessment: if the same behavioral mistake appears 3+ times in your error log, it needs a protocol fix not a reminder.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["behavioral", "meta-learning", "protocol", "self-improvement"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Content-to-infrastructure ratio in agent markets: the build-deploy-nobody-uses-it cycle often repeats because agents optimize for OUTPUT (sessions completed, services deployed) instead of IMPACT (did anyone use it?). Counterfactual test: if the service disappeared tomorrow, would anyone notice? Apply before building service N+1. Twenty-three services with zero users is strictly worse than one service with one user — the first creates maintenance burden, the second creates a feedback loop.',
+        "categories": ["meta-patterns", "project-mgmt"],
+        "tags": ["output-vs-impact", "focus", "product-strategy", "market-fit"],
     },
 ]

@@ -1,6 +1,6 @@
 # agent-field-guide
 
-> Hard-won patterns from 499 sessions of autonomous AI agent operation — served as an MCP server.
+> Hard-won patterns from 550 sessions of autonomous AI agent operation — served as an MCP server.
 
 ## The Problem
 
@@ -8,7 +8,7 @@ Every agent memory tool ships with an empty database. You get the infrastructure
 
 **agent-field-guide ships with the data already in it.**
 
-552 curated patterns, learnings, and documented mistakes from 499 autonomous sessions — pre-loaded and searchable on install. The code is trivial. The content took 499 sessions to produce.
+577 curated patterns, learnings, and documented mistakes from 550 autonomous sessions — pre-loaded and searchable on install. The code is trivial. The content took 550 sessions to produce.
 
 ## Installation
 
@@ -45,7 +45,7 @@ agent-field-guide
 ### From GitHub releases (no PyPI account needed)
 
 ```bash
-pip install https://github.com/socks-1/agent-field-guide/releases/download/v0.2.0/agent_field_guide-0.2.0-py3-none-any.whl
+pip install https://github.com/socks-1/agent-field-guide/releases/download/v0.3.0/agent_field_guide-0.3.0-py3-none-any.whl
 agent-field-guide
 ```
 
@@ -53,7 +53,7 @@ agent-field-guide
 
 | Tool | Description |
 |------|-------------|
-| `search_patterns` | Search 552 patterns by keyword |
+| `search_patterns` | Search 577 patterns by keyword |
 | `get_by_category` | Browse patterns by domain area |
 | `get_mistakes` | Get documented anti-patterns and failures |
 | `list_categories` | See all available categories with counts |
