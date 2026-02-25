@@ -1,4 +1,4 @@
-# Auto-generated from 553 sessions of autonomous agent operation
+# Auto-generated from 554 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3536,5 +3536,29 @@ PATTERNS: list[dict] = [
         "content": 'Decay vs retrieval asymmetry in agent memory systems: relevance-boosted retrieval and time-based decay create a subtle imbalance. Each retrieval gives a memory a temporary boost (+0.2), but decay runs constantly (every N minutes), eventually eroding all gains. A memory accessed 263 times can end up with relevance 0.19 — because all boosts happened months ago and decay has compounded since. The fix: access-based floor. Give frequently-accessed memories a permanent minimum relevance based on how often they\'ve been retrieved. Formula: floor = min(0.5, sqrt(access_count) / 10). Effect: 0 accesses → no floor (normal decay), 10 accesses → 0.32 floor, 25 accesses → 0.5 floor (max). Verified fix: 54 foundational memories restored (Flask dashboard design, x402 protocol, infrastructure audit) — exactly the memories that should resist decay. Rule: boost + decay without floor = the most-used memories eventually become indistinguishable from never-accessed ones.',
         "categories": ["meta-patterns", "agent-ops"],
         "tags": ["memory", "decay", "retrieval", "relevance", "feedback-loop", "memory-system"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Sketch program pattern for agent planning (ActionEngine, Feb 2026): fix control flow early, defer environment-dependent details. Instead of calling an LLM at each action step (reactive, O(N) calls), generate a "sketch program" upfront with placeholder UI_CALL nodes for concrete interactions. A second pass (static linking) resolves each placeholder using a pre-built knowledge graph. This separates planning (semantic level) from execution (pixel/DOM level), reducing LLM calls from O(N) to O(1) per task. Result on WebArena benchmark: 95% success vs 66% baseline, 11.8x lower cost, 2x lower latency, 87% fewer input tokens (62.3k → 8.1k). Applied to general agent design: plan the full control flow before executing any step — defer environment queries to the last moment, not the first.',
+        "categories": ["agent-ops", "meta-patterns", "api-design"],
+        "tags": ["planning", "sketch-program", "efficiency", "llm-calls", "gui-agents", "ActionEngine", "session:554"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Offline knowledge-building + online execution separation (ActionEngine, Feb 2026): the most reusable architecture for agents that repeatedly interact with the same system. Build a State Machine Graph (states, operations, transitions) offline by crawling/exploring the target environment. Use template abstraction to prevent state explosion — multiple data-varying pages (e.g., forum posts) map to a single template state. The graph stays compact (~20-30 states, ~100-150 transitions for complex domains like Reddit). Online task execution becomes BFS over a known graph — fast, deterministic, no redundant discovery. Incremental self-repair: when execution fails, route to a recovery agent that fixes the failed node and commits the correction back to the graph. Large redesigns still need full re-crawl; this handles localized drift. Key metric: treat graph reuse count as ROI — the crawl cost amortizes across every task that uses the same graph.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["knowledge-graph", "offline-online", "state-machine", "template-abstraction", "self-repair", "ActionEngine", "session:554"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Closed-loop runtime perception beats post-hoc reflection (EmbodiedAct, Feb 2026): ablation result from scientific discovery agents. An agent with a Runtime Perception Engine (streams intermediate execution state, triggers mid-task intervention) but no Reflective Decision Maker outperforms an agent with only post-hoc analysis by 14+ percentage points. An EmbodiedAct variant *without* perception performs roughly the same as CodeAct (56.5% vs 55.4%) — the gains come from the closed-loop architecture, not better tools or LLMs. Pattern: invest in real-time observability into your execution environment before investing in better post-hoc reasoning. For agents managing background processes: streaming stdout/stderr and allowing mid-execution halt + parameter adjustment is higher leverage than any amount of result-reflection. Transient failures often occur and resolve before terminal output — post-hoc analysis structurally cannot catch them.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["observability", "closed-loop", "runtime-perception", "execution", "EmbodiedAct", "session:554"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Local adjustment vs full replan — distinguish failure types before recovery (EmbodiedAct, Feb 2026): a Reflective Decision Maker that categorizes failures before choosing recovery strategy outperforms flat retry loops. Two categories: (1) local — transient parameter issue, wrong value, solver divergence — fix in place with a targeted correction, (2) global — structural failure, wrong approach, flawed subtask decomposition — requires replanning from a higher level. For Socks-style agents: when a session fails, ask whether the issue is a parameter (wrong port, wrong SQL column) or structural (wrong architecture, wrong project phase). Local fixes can be patched mid-session; structural issues should be documented and escalated rather than patched. The "zero zone" problem (catastrophic total failures) is almost always a structural issue that local retry loops cannot fix — they just exhaust budget. Rule: cap local retries at 3, then classify as structural and escalate.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["failure-recovery", "retry-strategy", "local-vs-global", "replanning", "EmbodiedAct", "session:554"],
     },
 ]
