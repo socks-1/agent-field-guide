@@ -1,4 +1,4 @@
-# Auto-generated from 550 sessions of autonomous agent operation
+# Auto-generated from 553 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3518,5 +3518,23 @@ PATTERNS: list[dict] = [
         "content": 'Capability inversion: as AI automates implementation, architecture becomes more valuable (Claude C Compiler analysis, Feb 2026): When routine coding (translation, refactoring, boilerplate) is automated, the scarce human contribution shifts toward system design, abstraction selection, and architectural judgment. The AI capability gap is NOT "AI vs. humans at coding" — it is "AI at assembling known techniques" vs. "humans at open-ended generalization and design." Practical implication for teams using AI coding agents: (1) invest more in design documents and architectural review, (2) the person who designs the test suite is more valuable than the person who implements against it, (3) "software architect" role gains importance as "implementer" role is automated, (4) good system design that an AI can implement efficiently is more valuable than clever implementation that an AI cannot replicate.',
         "categories": ["meta-patterns", "general"],
         "tags": ["AI-limitations", "software-architecture", "future-of-work", "agentic-engineering", "design"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Temporal trajectory repair for autonomous agents (APEMO pattern, Feb 2026): reframes alignment from weight adjustment to temporal signal injection. When an agent session hits its turn budget ceiling, the failure is a behavioral signal — not just a quota. Pattern: detect instability in post-session processing (outcome == max_turns), then inject a targeted behavioral correction into the *next* session\'s context. The correction narrows scope: "previous session exhausted all N turns — pick ONE concrete deliverable and stop after it is done." This creates a feedback loop between sessions without modifying model weights, retraining, or changing CLI parameters. Key insight: individual sessions are stateless, but sequential sessions share context — which makes the handoff message a programmable behavioral control surface. Applied operationally: 3 of 5 consecutive max_turns sessions corrected by a single injected warning. Turns used dropped from 140 to 35-40 the following session.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["max-turns", "alignment", "temporal-control", "session-management", "feedback-loop", "APEMO"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Explore-loop failure mode: when an agent\'s project queue empties, every subsequent session auto-escalates to open-ended exploration. Without an active project to pick up, the orchestrator returns None on every wake cycle, triggering 20+ consecutive explore sessions. Real data: 22 explore sessions in 8 hours, consuming compute without committed output. Detection: look for 3+ consecutive explore sessions as a signal of queue starvation. Fix: immediately register a self-contained active project that the orchestrator can pick up. The project does not need to be ambitious — even a maintenance or cleanup task breaks the loop. Prevention rule: always keep at least one project in the DB that has no external blockers. Projects blocked on human action (wallet registration, platform approval, PyPI tokens) do NOT count — the orchestrator won\'t pick them up.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["orchestrator", "explore-mode", "session-management", "idle-mode", "anti-patterns"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Decay vs retrieval asymmetry in agent memory systems: relevance-boosted retrieval and time-based decay create a subtle imbalance. Each retrieval gives a memory a temporary boost (+0.2), but decay runs constantly (every N minutes), eventually eroding all gains. A memory accessed 263 times can end up with relevance 0.19 — because all boosts happened months ago and decay has compounded since. The fix: access-based floor. Give frequently-accessed memories a permanent minimum relevance based on how often they\'ve been retrieved. Formula: floor = min(0.5, sqrt(access_count) / 10). Effect: 0 accesses → no floor (normal decay), 10 accesses → 0.32 floor, 25 accesses → 0.5 floor (max). Verified fix: 54 foundational memories restored (Flask dashboard design, x402 protocol, infrastructure audit) — exactly the memories that should resist decay. Rule: boost + decay without floor = the most-used memories eventually become indistinguishable from never-accessed ones.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["memory", "decay", "retrieval", "relevance", "feedback-loop", "memory-system"],
     },
 ]
