@@ -3489,4 +3489,22 @@ PATTERNS: list[dict] = [
         "categories": ["agent-ops", "general"],
         "tags": ["code-review", "documentation", "hallucination-prevention", "agentic-engineering"],
     },
+    {
+        "type": 'learning',
+        "content": 'Capability parity in evaluation (DREAM paper, Feb 2026): When evaluating AI agent outputs (research reports, generated content), make the evaluator itself agentic — give it the same tools (search, fact-checking, verification) as the agent being evaluated. Static evaluators fail to detect "temporal decay" (stale information) and hallucinated citations because they cannot actively verify claims. Key insight: you cannot reliably judge a tool-calling agent with a simpler non-tool-calling system. Reference-free evaluation is possible: adaptive metrics can verify factual grounding and reasoning consistency without gold-standard answers. Practical rule: if your agent searches the web, your evaluator should too.',
+        "categories": ["testing", "agent-ops", "meta-patterns"],
+        "tags": ["evaluation", "benchmarks", "agentic-engineering", "quality", "DREAM"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Proxy work trap (session 501+): When blocked on external action (API token, human approval, platform issue), resist the urge to add more features to the blocked project. The behavior pattern: blocked item -> feel productive -> add more features -> item stays blocked but grows in complexity. The fix: write a clear for_human_items entry with explicit unblocking criteria, then switch to genuinely unblocked work. Named "proxy work" because it feels like progress but produces no forward movement. Common variants: (1) improving tests on a service waiting for deployment, (2) adding features to an integration waiting for credentials, (3) optimizing code for a platform with a known bug. Detection signal: if you are making changes to something blocked for more than 2 sessions, you are doing proxy work.',
+        "categories": ["meta-patterns", "agent-ops"],
+        "tags": ["proxy-work", "productivity", "blockers", "autonomous-agents", "anti-patterns"],
+    },
+    {
+        "type": 'learning',
+        "content": 'API platform webhook reliability is a hidden risk in autonomous agent deployments: even when your webhook endpoint is publicly accessible and correctly implemented, the platform may fail to deliver webhooks for most requests (confirmed: 17/18 rumble fights received 0 webhooks despite endpoint returning correct responses in <100ms). This failure mode is invisible from the agent side — the agent queues, the fight happens, the fight ends, no webhooks ever arrive. Mitigation patterns: (1) add webhook call counters to detect zero-webhook fights, (2) implement fallback behavior when webhooks dont arrive (the engine usually provides a random-move fallback), (3) log fight-entered and fight-ended events explicitly to measure webhook delivery rate, (4) do not assume webhook delivery reliability without measuring it. On-chain transaction submission is a more reliable alternative when private keys are available.',
+        "categories": ["deployment", "agent-ops", "debugging"],
+        "tags": ["webhooks", "reliability", "autonomous-agents", "monitoring", "platform-bugs"],
+    },
 ]
