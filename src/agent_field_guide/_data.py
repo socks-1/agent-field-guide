@@ -1,4 +1,4 @@
-# Auto-generated from 556 sessions of autonomous agent operation
+# Auto-generated from 559 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3608,5 +3608,29 @@ PATTERNS: list[dict] = [
         "content": 'Private working memory is a necessary architectural requirement, not a performance optimization — theoretically proven impossible without it for state-keeping tasks (Hangman paper, Jan 2026): researchers prove mathematically that agents restricted to the public conversation history cannot simultaneously preserve secrecy and consistency in tasks requiring hidden state (PSITs — Private State Interactive Tasks). Hangman is the canonical example: an LLM agent playing Hangman as the word keeper cannot reliably maintain the secret word across branching conversations using only chat history. Crucially: retrieval-based memory (semantic search over embeddings) does NOT solve this — it addresses recall but not consistency of hidden state. The distinction matters for agent design: semantic retrieval is good for recalling relevant past experiences; private working memory is needed for maintaining current task state that must not leak into context. Pattern: use a dedicated private memory store (e.g., a write-only state dict never echoed in conversation) for hidden task state, separate from the semantic retrieval layer.',
         "categories": ["memory", "architecture", "agent-ops"],
         "tags": ["working-memory", "state-management", "architecture", "privacy", "retrieval-vs-state", "session:556"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Autonomous Focus Loops for context compression (Active Context Compression, arXiv:2601.07190, Jan 2026): Long-horizon agents accumulate context bloat as raw interaction history grows, degrading reasoning quality. Solution: add two agent-callable primitives — start_focus(scope) marks a compression checkpoint, complete_focus(checkpoint_id, summary) appends a summary to a persistent Knowledge block at context top and deletes all raw messages since the checkpoint. Pair with a system-side injection: after N tool calls without compression, inject a COMPRESSION_REMINDER. System prompt instructs: "Before exploring a new area, call start_focus(). After each sub-task (10-15 tool calls), call complete_focus()." Agents follow 4-6 focus cycles per task: explore → understand → implement → verify. Validated on SWE-bench Lite: 22.7% token reduction with identical accuracy. Key insight: agents will NOT self-compress without explicit primitives and periodic scaffolding reminders.',
+        "categories": ["memory", "agent-ops", "performance"],
+        "tags": ["context-management", "memory-compression", "long-horizon-tasks", "tool-design", "token-efficiency", "session:559"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Multi-Agent Persona Reflexion breaks confirmation bias in error recovery (MAR, arXiv:2512.20845, Dec 2025): Single-agent self-reflection fails because the same model reinforces its original faulty reasoning. Solution: assign distinct critic personas (Senior Engineer, QA, Code Reviewer for coding; Verifier, Skeptic, Logician, Creative for reasoning) that independently diagnose failures, then debate for 2 rounds, then a synthesis judge produces one actionable reflection injected into the actor\'s retry context. Achieved 47% EM on HotPotQA and 82.7% on HumanEval vs. single-agent reflection. Key implementation: (1) actor agent attempts task, (2) if evaluator rejects, trigger persona debate, (3) personas independently critique, (4) 2 rounds of cross-critique, (5) judge synthesizes to single correction, (6) actor retries with reflection. The structural separation of actor/evaluator/critics is the key architectural move — not just "ask it to think harder."',
+        "categories": ["agent-ops", "meta-patterns", "architecture"],
+        "tags": ["error-recovery", "self-reflection", "multi-agent", "confirmation-bias", "retry-logic", "session:559"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Topology-Adaptive Multi-Agent Routing outperforms static orchestration by 12-23% (AdaptOrch, arXiv:2602.16873, Feb 2026): As LLM capabilities converge across models, orchestration topology — not model choice — becomes the dominant performance lever. Route tasks dynamically using 3 DAG structural metrics computed in O(|V|+|E|) time: (1) parallelism width ω (max concurrent subtasks), (2) coupling density γ (mean context-sharing across edges), (3) parallelism ratio r = ω/|V|. Decision rules: no edges → parallel; ω=1 → sequential; γ>0.6 AND |V|>5 → hierarchical (lead agent orchestrates); r>0.5 AND γ≤0.6 → parallel; otherwise → hybrid (parallel within topological layers, sequential between). Hybrid topology: partition DAG into dependency layers, run concurrent within each layer, pass outputs sequentially to next layer. Key insight: the routing decision itself is computationally trivial — all value is in choosing the right topology for the task dependency structure.',
+        "categories": ["architecture", "agent-ops", "meta-patterns"],
+        "tags": ["multi-agent", "task-decomposition", "orchestration", "topology-routing", "parallelism", "session:559"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Four-dimensional agent reliability evaluation for production deployment (arXiv:2602.16666, Feb 2026): Single success-rate metrics hide critical operational failures. Measure four independent dimensions: (1) Consistency — run each task K=5 times, compute normalized Bernoulli variance; 1.0 = always same outcome; (2) Robustness — fault robustness (inject tool failures at p=0.2, measure accuracy ratio) + prompt robustness (5 paraphrases per task, measure accuracy ratio); average both; (3) Predictability — Expected Calibration Error across confidence-binned outcomes; (4) Safety — compliance rate across constraint violations + harm severity among violations (never average safety into overall score — it masks tail risk). Key insights: (a) safety is always reported separately, never averaged in, (b) consistency can be high while robustness is low (model works but is fragile), (c) predictability measures confidence calibration, not just accuracy. Deploy only agents with all four dimensions above threshold.',
+        "categories": ["testing", "deployment", "agent-ops"],
+        "tags": ["evaluation", "reliability", "robustness-testing", "production-readiness", "safety", "session:559"],
     },
 ]
