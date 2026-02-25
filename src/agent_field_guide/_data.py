@@ -3465,4 +3465,28 @@ PATTERNS: list[dict] = [
         "categories": ["meta-patterns", "project-mgmt"],
         "tags": ["output-vs-impact", "focus", "product-strategy", "market-fit"],
     },
+    {
+        "type": 'learning',
+        "content": 'Code is cheap, verification isn\'t (Simon Willison, Feb 2026): AI coding agents have reduced the cost of generating code to near-zero, but the cost of delivering *good* code (correct, tested, maintainable, secure, documented) remains high. Practical implication: second-guess your "not worth building" instincts. Anything that felt too expensive before — a feature, a refactor, a documentation update — is worth firing off as an async agent session. The downside is only wasted tokens; the upside is discovering valuable work that was previously cost-prohibitive. Shift developer effort from code production to quality gates: review, test validation, security, and architectural soundness.',
+        "categories": ["agent-ops", "general"],
+        "tags": ["agentic-engineering", "code-generation", "quality", "workflow"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Red/green TDD for agent-generated code (Simon Willison, Feb 2026): Test-first development is an excellent fit for AI coding agents because it prevents two common failure modes: code that doesn\'t work, and unnecessary code that goes unused. Protocol: (1) Write tests BEFORE requesting implementation. (2) Confirm tests FAIL (red phase) — skipping this risks having tests that already pass, defeating the point. (3) Request implementation from agent until tests pass (green). (4) The resulting test suite protects against future regressions as the codebase grows. Prompt shorthand: most frontier models understand "use red/green TDD" as complete instructions for the full test-first workflow.',
+        "categories": ["testing", "agent-ops"],
+        "tags": ["tdd", "testing", "agentic-engineering", "code-quality"],
+    },
+    {
+        "type": 'learning',
+        "content": 'First run the tests: a 4-word agent session opener (Simon Willison, Feb 2026): When starting an agent session on an existing codebase, open with "First run the tests" (or "Run pytest" / "Run uv run pytest" for Python). This accomplishes three things simultaneously: (1) Forces the agent to discover and learn how to run the test suite, (2) Reveals test count and complexity as a proxy for project scope, (3) Establishes a testing mindset for the rest of the session — agents that run tests first are more likely to write tests for their changes. Pattern works because frontier AI models already have strong testing discipline embedded; the prompt activates it. Four words encode substantial software engineering practice.',
+        "categories": ["testing", "agent-ops"],
+        "tags": ["testing", "agentic-engineering", "workflow", "session-opener"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Linear walkthroughs for codebase understanding via agents (Simon Willison, Feb 2026): Use a coding agent to generate structured walkthroughs of unfamiliar codebases. Key insight: never let the agent manually copy code snippets into the walkthrough — this introduces hallucination risk where the agent "remembers" code slightly wrong. Instead, instruct the agent to use shell commands (sed, grep, cat) to extract actual code. The Showboat tool formalizes this: "showboat note" adds commentary, "showboat exec" runs a shell command and documents both the command and output. Prompt pattern: "Read the source, plan a linear walkthrough, use showboat exec with sed/grep/cat for code snippets." Produces accurate, comprehensive documentation of complex codebases in one session.',
+        "categories": ["agent-ops", "general"],
+        "tags": ["code-review", "documentation", "hallucination-prevention", "agentic-engineering"],
+    },
 ]
