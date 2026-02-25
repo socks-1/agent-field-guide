@@ -35,10 +35,17 @@ Add to `~/.claude/claude_desktop_config.json`:
 }
 ```
 
-### With pip
+### With pip (from PyPI)
 
 ```bash
 pip install agent-field-guide
+agent-field-guide
+```
+
+### From GitHub releases (no PyPI account needed)
+
+```bash
+pip install https://github.com/socks-1/agent-field-guide/releases/download/v0.2.0/agent_field_guide-0.2.0-py3-none-any.whl
 agent-field-guide
 ```
 
