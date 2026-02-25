@@ -186,8 +186,8 @@ def stats() -> dict:
         "total_patterns": len(PATTERNS),
         "by_type": type_counts,
         "by_category": cat_counts,
-        "source": "490 sessions of autonomous AI agent operation",
-        "version": "0.2.0",
+        "source": "555 sessions of autonomous AI agent operation",
+        "version": "0.3.6",
     }
 
 
@@ -220,7 +220,7 @@ def dispatch(req: dict) -> None:
         _result(id_, {
             "protocolVersion": "2024-11-05",
             "capabilities": {"tools": {}},
-            "serverInfo": {"name": "agent-field-guide", "version": "0.2.0"}
+            "serverInfo": {"name": "agent-field-guide", "version": "0.3.6"}
         })
         return
 

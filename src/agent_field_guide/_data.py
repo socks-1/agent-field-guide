@@ -1,4 +1,4 @@
-# Auto-generated from 554 sessions of autonomous agent operation
+# Auto-generated from 555 sessions of autonomous agent operation
 # Manually curated — patterns reviewed for universality and accuracy
 
 PATTERNS: list[dict] = [
@@ -3560,5 +3560,29 @@ PATTERNS: list[dict] = [
         "content": 'Local adjustment vs full replan — distinguish failure types before recovery (EmbodiedAct, Feb 2026): a Reflective Decision Maker that categorizes failures before choosing recovery strategy outperforms flat retry loops. Two categories: (1) local — transient parameter issue, wrong value, solver divergence — fix in place with a targeted correction, (2) global — structural failure, wrong approach, flawed subtask decomposition — requires replanning from a higher level. For Socks-style agents: when a session fails, ask whether the issue is a parameter (wrong port, wrong SQL column) or structural (wrong architecture, wrong project phase). Local fixes can be patched mid-session; structural issues should be documented and escalated rather than patched. The "zero zone" problem (catastrophic total failures) is almost always a structural issue that local retry loops cannot fix — they just exhaust budget. Rule: cap local retries at 3, then classify as structural and escalate.',
         "categories": ["agent-ops", "meta-patterns"],
         "tags": ["failure-recovery", "retry-strategy", "local-vs-global", "replanning", "EmbodiedAct", "session:554"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Spatial alignment is the critical bottleneck for embodied agents, not perception (NativeEmbodied, Feb 2026): VLMs have largely solved scene perception — they can see and describe environments competently. The actual failure point is fine-grained spatial alignment: precise positioning, view control, and spatial grounding. Best performers hit only 34.9% on Search tasks in native (non-abstracted) settings despite solid perception scores. Implication: if your agent needs to act in a physical or spatial environment, pour resources into spatial alignment training and tooling before improving the perception stack further — perception improvements yield diminishing returns against an already-solved problem.',
+        "categories": ["agent-ops", "meta-patterns"],
+        "tags": ["spatial-reasoning", "embodied-agents", "skill-decomposition", "benchmarking", "VLM", "session:555"],
+    },
+    {
+        "type": 'learning',
+        "content": "Extended reasoning modes hurt action execution — decouple deliberative planning from low-latency control (NativeEmbodied, Feb 2026): enabling chain-of-thought or o3-style reasoning improves cognitive tasks (perception, planning) but actively degrades action execution (spatial alignment, navigation). The paper frames this as a 'cerebrum vs. cerebellum' division — the same reasoning pipeline that helps you think carefully about what to do makes you worse at the precise motor-like control needed to execute it. Counterintuitive and empirically validated. Practical pattern: use separate pathways for deliberative planning vs. low-latency action generation. A unified 'reason harder' approach is not the answer for execution-heavy tasks. For software agents: heavy reflection before code execution is fine; do not apply the same deliberation pattern to tight control loops or real-time reactive behavior.",
+        "categories": ["agent-ops", "meta-patterns", "performance"],
+        "tags": ["reasoning", "architecture", "action-control", "VLM-failure", "system-design", "session:555"],
+    },
+    {
+        "type": 'mistake',
+        "content": 'Abstracted action spaces hide real-world readiness — benchmark in native action spaces (NativeEmbodied, Feb 2026): most agent evaluations use high-level, discretized action spaces (e.g., "go to kitchen", "pick up cup") that abstract away continuous control. These inflate perceived competence — agents scoring well on abstracted commands fail significantly in real-world or native-control settings. The NativeEmbodied benchmark demonstrates that native action spaces are the only reliable signal for deployment readiness. If you are building or evaluating agents on high-level APIs or tool abstractions, your performance metrics will overestimate actual capability. This applies to software agents too: an agent that succeeds against mocked tools may fail against real APIs with latency, partial failures, and schema drift.',
+        "categories": ["testing", "deployment", "agent-ops"],
+        "tags": ["benchmarking", "evaluation", "action-space", "deployment", "embodied-agents", "session:555"],
+    },
+    {
+        "type": 'mistake',
+        "content": 'Three structural navigation failure modes: premature conclusion, redundant adjustment, collision loop (NativeEmbodied, Feb 2026): across all tested VLMs, navigation failures clustered into three specific patterns — (1) Insufficient Exploration: agents commit to conclusions from partial observations, overconfident rather than continuing search; (2) Redundant Adjustments: repetitive view rotations that waste steps and create operational loops; (3) Collision Mishandling: agents fail to recover from obstacles, especially in tight spaces. These are not random failures — they point to missing capabilities: uncertainty calibration, action novelty enforcement, and obstacle recovery. Generalizes to software agents: (1) premature success claims without full verification, (2) retrying the same failed action in a loop, (3) getting stuck on a blocker without escalating. Instrument for these three failure classes specifically — raw success rate misses the pattern.',
+        "categories": ["agent-ops", "debugging"],
+        "tags": ["navigation", "failure-analysis", "agent-debugging", "operational-loops", "uncertainty", "session:555"],
     },
 ]
