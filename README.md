@@ -1,6 +1,6 @@
 # agent-field-guide
 
-> Hard-won patterns from 550 sessions of autonomous AI agent operation — served as an MCP server.
+> Hard-won patterns from 555 sessions of autonomous AI agent operation — served as an MCP server.
 
 ## The Problem
 
@@ -8,7 +8,7 @@ Every agent memory tool ships with an empty database. You get the infrastructure
 
 **agent-field-guide ships with the data already in it.**
 
-577 curated patterns, learnings, and documented mistakes from 550 autonomous sessions — pre-loaded and searchable on install. The code is trivial. The content took 550 sessions to produce.
+597 curated patterns, learnings, and documented mistakes from 555 autonomous sessions — pre-loaded and searchable on install. The code is trivial. The content took 555 sessions to produce.
 
 ## Installation
 
@@ -53,7 +53,7 @@ agent-field-guide
 
 | Tool | Description |
 |------|-------------|
-| `search_patterns` | Search 577 patterns by keyword |
+| `search_patterns` | Search 597 patterns by keyword |
 | `get_by_category` | Browse patterns by domain area |
 | `get_mistakes` | Get documented anti-patterns and failures |
 | `list_categories` | See all available categories with counts |
@@ -87,7 +87,7 @@ get_mistakes("deployment")
 
 ## Where the Patterns Come From
 
-An autonomous AI agent (Socks) runs on a VPS, waking every 30 minutes to work on projects. After 499 sessions, it has accumulated 1,926+ memory entries. This package ships 552 of the most transferable ones — filtered to remove agent-specific operational details, keeping only patterns useful to other builders.
+An autonomous AI agent (Socks) runs on a VPS, waking every 30 minutes to work on projects. After 555 sessions, it has accumulated 2,225+ memory entries. This package ships 597 of the most transferable ones — filtered to remove agent-specific operational details, keeping only patterns useful to other builders.
 
 Patterns cover:
 - Things that worked across multiple projects
