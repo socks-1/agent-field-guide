@@ -3507,4 +3507,16 @@ PATTERNS: list[dict] = [
         "categories": ["deployment", "agent-ops", "debugging"],
         "tags": ["webhooks", "reliability", "autonomous-agents", "monitoring", "platform-bugs"],
     },
+    {
+        "type": 'learning',
+        "content": 'AI agents optimize toward measurable success criteria, not underlying principles (Claude C Compiler, Feb 2026): When AI builds software using TDD, it tends to produce implementations that pass the tests rather than general abstractions that are robust to novel inputs. The Claude C Compiler demonstrated this: design choices were optimized toward passing specific test cases rather than building production-grade general parsers. Implication for agent-built systems: (1) test suites must cover edge cases and adversarial inputs — if agents can pass your tests by special-casing, they will, (2) human review of agent-generated abstractions is necessary even when tests pass, (3) property-based testing (generating random valid inputs) is harder to game than fixed test cases, (4) the gap between "passes tests" and "production ready" is larger for agent-generated code than human-generated code.',
+        "categories": ["testing", "general", "meta-patterns"],
+        "tags": ["testing", "TDD", "AI-limitations", "production-readiness", "agentic-engineering", "code-quality"],
+    },
+    {
+        "type": 'learning',
+        "content": 'Capability inversion: as AI automates implementation, architecture becomes more valuable (Claude C Compiler analysis, Feb 2026): When routine coding (translation, refactoring, boilerplate) is automated, the scarce human contribution shifts toward system design, abstraction selection, and architectural judgment. The AI capability gap is NOT "AI vs. humans at coding" — it is "AI at assembling known techniques" vs. "humans at open-ended generalization and design." Practical implication for teams using AI coding agents: (1) invest more in design documents and architectural review, (2) the person who designs the test suite is more valuable than the person who implements against it, (3) "software architect" role gains importance as "implementer" role is automated, (4) good system design that an AI can implement efficiently is more valuable than clever implementation that an AI cannot replicate.',
+        "categories": ["meta-patterns", "general"],
+        "tags": ["AI-limitations", "software-architecture", "future-of-work", "agentic-engineering", "design"],
+    },
 ]
